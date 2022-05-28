@@ -3,6 +3,8 @@ import { Button, Navbar, Container, NavDropdown, Nav, Row, Col } from 'react-boo
 import './App.css';
 // import bgImg from './img/bg.png';
 import data from './data.js'
+import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
+import Detail from './pages/Detail.js'
 
 const DataList = (props) => {
   return(
@@ -18,17 +20,19 @@ const DataList = (props) => {
 function App() {
 
   let [shoes]  = useState(data)
+  let navigate = useNavigate()
 
   return (
     <div className="App">
+
       <Navbar bg="light" expand="lg">
         <Container>
-          <Navbar.Brand href="#home">Shop</Navbar.Brand>
+          <Navbar.Brand onClick={()=>{ navigate('') }}>Shop</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="#home">Home</Nav.Link>
-              <Nav.Link href="#link">Link</Nav.Link>
+                <Nav.Link onClick={()=> { navigate('') }}>Home</Nav.Link>
+                <Nav.Link onClick={()=> { navigate('detail') }}>Detail</Nav.Link>
               <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
@@ -41,21 +45,29 @@ function App() {
         </Container>
       </Navbar>
 
-      {/* <div className='main-bg' style={{backgroundImage : 'url('+bgImg+')'}}></div> */}
-      <div className='main-bg' style={{backgroundImage : 'url('+process.env.PUBLIC_URL + '/img/bg.png'+')'}}></div>
-      <Container>
-        <Row>
-          {
-            shoes.map((a,i)=>{
-              return(
-                <Col key={i}>
-                  <DataList shoes={shoes[i]} />
-                </Col>
-              )
-            })
-          }
-        </Row>
-      </Container>
+      <Routes>
+        <Route path="/" element={
+          <>
+            {/* <div className='main-bg' style={{backgroundImage : 'url('+bgImg+')'}}></div> */}
+            <div className='main-bg' style={{backgroundImage : 'url('+process.env.PUBLIC_URL + '/img/bg.png'+')'}}></div>
+            <Container>
+              <Row>
+                {
+                  shoes.map((a,i)=>{
+                    return(
+                      <Col key={i}>
+                        <DataList shoes={shoes[i]} />
+                      </Col>
+                    )
+                  })
+                }
+              </Row>
+            </Container>
+          </>        
+        } />
+        <Route path="/detail" element={<Detail/>} />
+        <Route path="*" element={<div>없는 페이지입니다.</div>} />
+      </Routes>
 
     </div>
   );
